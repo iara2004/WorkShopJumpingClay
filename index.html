@@ -12,16 +12,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      /* Fundo padrão para PC */
       background: url('fundo2.png') no-repeat center center/cover;
-    }
-
-    /* Ajustes para telemóvel */
-    @media (max-width: 768px) {
-      body {
-        background: url('fundo2.png') no-repeat center top/contain;
-        background-color: #ffffff; /* cor de fundo atrás da imagem */
-      }
     }
 
     .card {
@@ -134,10 +125,12 @@
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
+    // === IDs fornecidos ===
     const EMAILJS_PUBLIC_KEY = 'zKlI4yg_zwkoBCVsx';
     const SERVICE_ID = 'service_74zs6xh';
-    const TEMPLATE_ID_SHOP = 'template_9me0pn4';
-    const TEMPLATE_ID_PARTICIPANT = 'template_zjamkql';
+    const TEMPLATE_ID_SHOP = 'template_9me0pn4'; // aviso para a loja
+    const TEMPLATE_ID_PARTICIPANT = 'template_zjamkql'; // confirmação para participante
+    // ======================
 
     (function(){
       emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
@@ -164,7 +157,9 @@
       };
 
       try {
+        // Envia email de confirmação ao participante
         await emailjs.send(SERVICE_ID, TEMPLATE_ID_PARTICIPANT, templateParams);
+        // Envia aviso para a loja
         await emailjs.send(SERVICE_ID, TEMPLATE_ID_SHOP, templateParams);
 
         msgArea.innerHTML = '<div class="success">Inscrição efetuada! Receberás um email de confirmação.</div>';
