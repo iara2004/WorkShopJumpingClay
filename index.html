@@ -8,18 +8,19 @@
     body {
       margin: 0;
       font-family: system-ui, Segoe UI, Arial;
-      height: 100vh;
+      min-height: 100vh; /* cobre todo o ecrã */
       display: flex;
       align-items: center;
       justify-content: center;
       background: url('fundo2.png') no-repeat center center/cover;
+      background-attachment: fixed; /* opcional: mantém a imagem fixa */
     }
 
     .card {
-      width: 100%;
-      max-width: 600px;
+      width: 90%;              /* ocupa até 90% do ecrã no mobile */
+      max-width: 500px;        /* no PC nunca passa disto */
       background: rgba(255, 255, 255, 0.9);
-      padding: 40px;
+      padding: 30px;
       border-radius: 10px;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     }
@@ -46,7 +47,7 @@
 
     .row {
       display: flex;
-      gap: 40px;
+      gap: 20px;
     }
 
     .row > div {
@@ -82,6 +83,18 @@
       padding: 10px;
       margin-top: 12px;
       border-radius: 6px;
+    }
+
+    /* Ajustes para mobile */
+    @media (max-width: 600px) {
+      .card {
+        padding: 20px;
+      }
+
+      .row {
+        flex-direction: column; /* Nome e Sobrenome um em cima do outro */
+        gap: 10px;
+      }
     }
   </style>
 </head>
