@@ -8,17 +8,25 @@
     body {
       margin: 0;
       font-family: system-ui, Segoe UI, Arial;
-      min-height: 100vh; /* cobre todo o ecrã */
+      min-height: 100vh;
+      background: url('fundo2.png') no-repeat center center;
+      background-size: cover;
+      background-attachment: scroll; /* scroll = compatível com mobile */
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: url('fundo2.png') no-repeat center center/cover;
-      background-attachment: fixed; /* opcional: mantém a imagem fixa */
+      padding: 40px 20px; /* espaço para respirar no mobile */
     }
 
     .card {
-      width: 90%;              /* ocupa até 90% do ecrã no mobile */
-      max-width: 500px;        /* no PC nunca passa disto */
+      width: 90%;
+      max-width: 500px;
       background: rgba(255, 255, 255, 0.9);
       padding: 30px;
       border-radius: 10px;
@@ -99,51 +107,51 @@
   </style>
 </head>
 <body>
-  <div class="card">
-    <h2>Inscrição — Workshop JumpingClay</h2>
-    <form id="workshop-form">
-      <div class="row">
-        <div>
-          <label>Nome
-            <input type="text" name="first_name" required />
-          </label>
+  <div class="container">
+    <div class="card">
+      <h2>Inscrição — Workshop JumpingClay</h2>
+      <form id="workshop-form">
+        <div class="row">
+          <div>
+            <label>Nome
+              <input type="text" name="first_name" required />
+            </label>
+          </div>
+          <div>
+            <label>Sobrenome
+              <input type="text" name="last_name" required />
+            </label>
+          </div>
         </div>
-        <div>
-          <label>Sobrenome
-            <input type="text" name="last_name" required />
-          </label>
-        </div>
-      </div>
 
-      <label>Telemóvel
-        <input type="tel" name="phone" pattern="[0-9+() -]{6,}" required />
-      </label>
+        <label>Telemóvel
+          <input type="tel" name="phone" pattern="[0-9+() -]{6,}" required />
+        </label>
 
-      <label>Email
-        <input type="email" name="email" required />
-      </label>
+        <label>Email
+          <input type="email" name="email" required />
+        </label>
 
-      <label style="margin-top:10px">
-        <input type="checkbox" name="consent" id="consent" />
-        Aceito ser gravado(a) e fotografado(a) durante o workshop
-      </label>
+        <label style="margin-top:10px">
+          <input type="checkbox" name="consent" id="consent" />
+          Aceito ser gravado(a) e fotografado(a) durante o workshop
+        </label>
 
-      <button type="submit" id="submitBtn">Confirmar inscrição</button>
-      <p style="text-align:center; font-size: 0.85em; color: #555; margin-top: 6px;">(workshop grátis)</p>
+        <button type="submit" id="submitBtn">Confirmar inscrição</button>
+        <p style="text-align:center; font-size: 0.85em; color: #555; margin-top: 6px;">(workshop grátis)</p>
 
-      <div id="msgArea"></div>
-    </form>
+        <div id="msgArea"></div>
+      </form>
+    </div>
   </div>
 
   <!-- EmailJS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
-    // === IDs fornecidos ===
     const EMAILJS_PUBLIC_KEY = 'zKlI4yg_zwkoBCVsx';
     const SERVICE_ID = 'service_74zs6xh';
-    const TEMPLATE_ID_SHOP = 'template_9me0pn4'; // aviso para a loja
-    const TEMPLATE_ID_PARTICIPANT = 'template_zjamkql'; // confirmação para participante
-    // ======================
+    const TEMPLATE_ID_SHOP = 'template_9me0pn4';
+    const TEMPLATE_ID_PARTICIPANT = 'template_zjamkql';
 
     (function(){
       emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
@@ -170,9 +178,7 @@
       };
 
       try {
-        // Envia email de confirmação ao participante
         await emailjs.send(SERVICE_ID, TEMPLATE_ID_PARTICIPANT, templateParams);
-        // Envia aviso para a loja
         await emailjs.send(SERVICE_ID, TEMPLATE_ID_SHOP, templateParams);
 
         msgArea.innerHTML = '<div class="success">Inscrição efetuada! Receberás um email de confirmação.</div>';
