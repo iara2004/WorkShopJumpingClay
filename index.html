@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Inscrição Workshop</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, Segoe UI, Arial;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: url('fundo2.png') no-repeat center center/cover;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    input[type=text], 
+    input[type=email], 
+    input[type=tel] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+    }
+
+    .row {
+      display: flex;
+      gap: 40px;
+    }
+
+    .row > div {
+      flex: 1;
+    }
+
+    button {
+      margin-top: 14px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 0;
+      background: #0066cc;
+      color: white;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background: #004999;
+    }
+
+    .success {
+      background: #e6ffed;
+      border: 1px solid #b7f0c9;
+      padding: 10px;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+
+    .error {
+      background: #ffeded;
+      border: 1px solid #f0b7b7;
+      padding: 10px;
+      margin-top: 12px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Inscrição — Workshop JumpingClay</h2>
+    <form id="workshop-form">
+      <div class="row">
+        <div>
+          <label>Nome
+            <input type="text" name="first_name" required />
+          </label>
+        </div>
+        <div>
+          <label>Sobrenome
+            <input type="text" name="last_name" required />
+          </label>
+        </div>
+      </div>
+
+      <label>Telemóvel
+        <input type="tel" name="phone" pattern="[0-9+() -]{6,}" required />
+      </label>
+
+      <label>Email
+        <input type="email" name="email" required />
+      </label>
+
+      <label style="margin-top:10px">
+        <input type="checkbox" name="consent" id="consent" />
+        Aceito ser gravado(a) e fotografado(a) durante o workshop
+      </label>
+
+      <button type="submit" id="submitBtn">Confirmar inscrição</button>
+      <p style="text-align:center; font-size: 0.85em; color: #555; margin-top: 6px;">(workshop grátis)</p>
+
+      <div id="msgArea"></div>
+    </form>
+  </div>
+
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    // === IDs fornecidos ===
+    const EMAILJS_PUBLIC_KEY = 'zKlI4yg_zwkoBCVsx';
+    const SERVICE_ID = 'service_74zs6xh';
+    const TEMPLATE_ID_SHOP = 'template_9me0pn4'; // aviso para a loja
+    const TEMPLATE_ID_PARTICIPANT = 'template_zjamkql'; // confirmação para participante
+    // ======================
+
+    (function(){
+      emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+    })();
+
+    const form = document.getElementById('workshop-form');
+    const submitBtn = document.getElementById('submitBtn');
+    const msgArea = document.getElementById('msgArea');
+
+    form.addEventListener('submit', async function(e){
+      e.preventDefault();
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'A enviar...';
+      msgArea.innerHTML = '';
+
+      const formData = new FormData(form);
+      const templateParams = {
+        first_name: formData.get('first_name') || '',
+        last_name: formData.get('last_name') || '',
+        phone: formData.get('phone') || '',
+        email: formData.get('email') || '',
+        consent: document.getElementById('consent').checked ? 'Sim' : 'Não',
+        timestamp: new Date().toLocaleString()
+      };
+
+      try {
+        // Envia email de confirmação ao participante
+        await emailjs.send(SERVICE_ID, TEMPLATE_ID_PARTICIPANT, templateParams);
+        // Envia aviso para a loja
+        await emailjs.send(SERVICE_ID, TEMPLATE_ID_SHOP, templateParams);
+
+        msgArea.innerHTML = '<div class="success">Inscrição efetuada! Receberás um email de confirmação.</div>';
+        form.reset();
+      } catch (err) {
+        msgArea.innerHTML = '<div class="error">Ocorreu um erro ao enviar. Por favor tenta novamente mais tarde.</div>';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Confirmar inscrição';
+      }
+    });
+  </script>
+</body>
+</html>
